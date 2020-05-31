@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@color/lightGrey"
+    android:padding="16dp"
+    android:layout_weight="100"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/darkYellow"
+        android:layout_margin="40dp"
+        android:textStyle="bold"
+        android:text="HOME"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/holder1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:counterEnabled="true"
+        android:layout_margin="10dp"
+        app:counterMaxLength="7">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="player 1"
+            android:textSize="25sp"
+            android:inputType="text"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/holder2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:layout_margin="10dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="7">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="player 2"
+            android:id="@+id/Name2"
+            android:textSize="25sp"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <Button
+            android:id="@+id/doubleP"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:background="@drawable/button_modif"
+            android:onClick="buttonEffect"
+            android:text="Double \nPlayer"
+            android:tag="5"
+            android:layout_marginRight="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+
+        <Button
+            android:id="@+id/singleP"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:tag="6"
+            android:background="@drawable/button_modif"
+            android:lines="2"
+            android:onClick="buttonEffect"
+            android:text="Single \nPlayer"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="23sp" />
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Start"
+        android:layout_margin="5dp"
+        android:onClick="OnClicked"
+        android:background="@color/darkYellow"
+        android:textColor="@color/lightGrey"/>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
