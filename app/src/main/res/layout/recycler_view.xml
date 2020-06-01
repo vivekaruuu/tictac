@@ -6,22 +6,77 @@
     android:layout_weight="100"
     android:orientation="vertical"
     tools:context=".MainActivity">
-    <!--   -->
 
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="5"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@color/lightGrey"
+        android:gravity="left"
+        >
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="55"
+            android:textSize="23sp"
+
+            android:lines="1"
+            android:text="Name"
+            android:textColor="@color/darkYellow"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="15"
+            android:textSize="18sp"
+            android:lines="1"
+            android:textColor="@color/darkYellow"
+            android:id="@+id/wins"
+            android:text="win"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="15"
+            android:textSize="18sp"
+            android:lines="1"
+            android:textColor="@color/darkYellow"
+            android:id="@+id/draw"
+            android:text="draw"
+            />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="15"
+            android:textSize="18sp"
+            android:lines="1"
+            android:textColor="@color/darkYellow"
+            android:id="@+id/losses"
+            android:text="loss"
+            />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:background="@color/lightGrey"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_weight="70"
+        android:layout_weight="88"
+        android:layout_margin="5dp"
         android:padding="10dp" >
     </androidx.recyclerview.widget.RecyclerView>
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="20"
+        android:layout_height="0dp"
+        android:layout_weight="7"
         android:text="Game"
         android:onClick="gameClicked"
         android:layout_gravity="center"/>

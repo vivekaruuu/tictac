@@ -1,10 +1,10 @@
 package com.example.tictactoe;
 
 public class item {
-    String name;
-    int win;
-    int draw;
-    int loss;
+    String name=null;
+    int win=0;
+    int draw=0;
+    int loss=0;
 
     public String getName() {
         return name;

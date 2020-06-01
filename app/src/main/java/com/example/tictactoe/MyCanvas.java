@@ -1,6 +1,7 @@
 package com.example.tictactoe;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,8 +16,12 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import static android.content.ContentValues.TAG;
 
@@ -36,9 +41,11 @@ public class MyCanvas extends View {
     float midWs;
     float midHe;
     float midWe;
-    int ch=0;
+    static int ch=0;
     int stop=0;
+    static int computerFirst=1;
     MyListener myListener ;
+    int mSwitchValue;
 
     static ArrayList<shapes> mAllShapes=new ArrayList<shapes>();
     public MyCanvas(Context context) {
@@ -178,11 +185,19 @@ public class MyCanvas extends View {
         for (int[][] winningPosition : winningPositions) {
             if (mSelectedBoxes[winningPosition[0][0]-1][winningPosition[0][1]-1]== mSelectedBoxes[winningPosition[1][0]-1][winningPosition[1][1]-1] && mSelectedBoxes[winningPosition[2][0]-1][winningPosition[2][1]-1] == mSelectedBoxes[winningPosition[0][0]-1][winningPosition[0][1]-1] && mSelectedBoxes[winningPosition[0][0]-1][winningPosition[0][1]-1] != 0) {
                 MediaPlayer mediaPlayer;
+                stop=1;
+                MainActivity.interruptedLeader=0;
                 if(mTurn==2) {
                     mediaPlayer=MediaPlayer.create(getContext(),R.raw.win1);
                     mediaPlayer.start();
                     Toast.makeText(getContext(), String.format("%s won", MainActivity.name1),Toast.LENGTH_LONG).show();
-                    stop=1;
+
+                    if(MainActivity.name1.equals("Dumbot2")){
+                        mSwitchValue=3;
+                    }
+                    else {
+                        mSwitchValue=1;
+                    }
                     DelayFunction();
 
 
@@ -192,7 +207,13 @@ public class MyCanvas extends View {
                     mediaPlayer=MediaPlayer.create(getContext(),R.raw.win2);
                     mediaPlayer.start();
                     Toast.makeText(getContext(), String.format("%s won", MainActivity.name2),Toast.LENGTH_LONG).show();
-                    stop=1;
+
+                    if(MainActivity.name2.equals("Dumbot2")){
+                        mSwitchValue=3;
+                    }
+                    else {
+                        mSwitchValue=1;
+                    }
                     DelayFunction();
                     //drawFinish(winningPosition[0][0],winningPosition[0][1],winningPosition[2][0],winningPosition[2][1]);
 
@@ -202,11 +223,12 @@ public class MyCanvas extends View {
         }
 
         if(ch==9){
+            stop=1;
             MediaPlayer mediaPlayer;
             mediaPlayer=MediaPlayer.create(getContext(),R.raw.draw);
             mediaPlayer.start();
             Toast.makeText(getContext(),"Draw!",Toast.LENGTH_LONG).show();
-            stop=1;
+            mSwitchValue=2;
             DelayFunction();
 
         }
@@ -229,8 +251,70 @@ public class MyCanvas extends View {
                 myListener.updateMyText();
                 invalidate();
 
+                if(StartActivity.selected2==2){
+                    int check=0;
+                   for(item k:MainActivity.mItems){
+                       if(k.getName().equals(MainActivity.orgName))
+                       {
+                           check=1;
+                           switch (mSwitchValue) {
+                               case 1:
+                                   k.setWin(k.getWin() + 1);
+                                   break;
+                               case 2:
+                                   k.setDraw(k.getDraw() + 1);
+                                   break;
+                               case 3:
+                                   k.setLoss(k.getLoss() + 1);
+                                   break;
+                           }
+                           myListener.updateMyText();
+                       }
+                   }
+                   if(check==0) {
+                       item item = new item();
+
+                       item.setName(MainActivity.orgName);
+                       switch (mSwitchValue) {
+                           case 1:
+                               item.setWin(item.getWin() + 1);
+                               break;
+                           case 2:
+                               item.setDraw(item.getDraw() + 1);
+                               break;
+                           case 3:
+                               item.setLoss(item.getLoss() + 1);
+                               break;
+                       }
+                       MainActivity.mItems.add(item);
+                       myListener.updateMyText();
+                   }
+                    saveData();
+                }
+                if(computerFirst==1&&StartActivity.selected2==2){
+                    mSelectedBoxes[1][1] = 1;
+                    mTurn=2;
+                    ch++;
+                    computerFirst=2;
+
+                    CreateCross(2,2);
+
+                }else {
+                    computerFirst=1;
+                }
+                Log.d(TAG, "run: "+computerFirst);
+
+                MainActivity.interruptedLeader=1;
             }
-        }, 2000);
+        }, 1500);
+    }
+    public void saveData(){
+        SharedPreferences sharedPreferences=getContext().getSharedPreferences("com.example.tictactoe",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        Gson gson=new Gson();
+        String json=gson.toJson(MainActivity.mItems);
+        editor.putString("items",json);
+        editor.apply();
     }
 
     public void CreateCircle(int x,int y){
@@ -260,7 +344,6 @@ public class MyCanvas extends View {
         for (int[][] winningPosition : winningPositions) {
             if (mSelectedBoxes[winningPosition[0][0] - 1][winningPosition[0][1] - 1] == mSelectedBoxes[winningPosition[1][0] - 1][winningPosition[1][1] - 1] && mSelectedBoxes[winningPosition[0][0] - 1][winningPosition[0][1] - 1] != 0 && mSelectedBoxes[winningPosition[2][0] - 1][winningPosition[2][1] - 1] == 0) {
                 ch++;
-                Log.d(TAG, "233Algorithm: jnk");
                 if (mTurn == 1) {
                     mSelectedBoxes[winningPosition[2][0] - 1][winningPosition[2][1] - 1] = 1;
                     mTurn = 2;
@@ -277,7 +360,6 @@ public class MyCanvas extends View {
             }
             if (mSelectedBoxes[winningPosition[0][0] - 1][winningPosition[0][1] - 1] == mSelectedBoxes[winningPosition[2][0] - 1][winningPosition[2][1] - 1] && mSelectedBoxes[winningPosition[0][0] - 1][winningPosition[0][1] - 1] != 0 && mSelectedBoxes[winningPosition[1][0] - 1][winningPosition[1][1] - 1] == 0) {
                 ch++;
-                Log.d(TAG, "Algorithm: jnk");
                 if (mTurn == 1) {
                     mSelectedBoxes[winningPosition[1][0] - 1][winningPosition[1][1] - 1] = 1;
                     mTurn = 2;
@@ -294,7 +376,6 @@ public class MyCanvas extends View {
             }
             if (mSelectedBoxes[winningPosition[1][0] - 1][winningPosition[1][1] - 1] == mSelectedBoxes[winningPosition[2][0] - 1][winningPosition[2][1] - 1] && mSelectedBoxes[winningPosition[2][0] - 1][winningPosition[2][1] - 1] != 0 && mSelectedBoxes[winningPosition[0][0] - 1][winningPosition[0][1] - 1] == 0) {
                 ch++;
-                Log.d(TAG, "Algorithsdsdsdm: jnk");
 
                 if (mTurn == 1) {
                     mSelectedBoxes[winningPosition[0][0] - 1][winningPosition[0][1] - 1] = 1;
@@ -315,7 +396,6 @@ public class MyCanvas extends View {
 
         int temp=mTurn;
         while(mTurn==temp){
-            Log.d(TAG, "Algorithm: ");
             randomSelect();
         }
 

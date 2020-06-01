@@ -5,16 +5,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import com.example.tictactoe.MyCanvas.MyListener;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.jar.Attributes;
+
 import com.example.tictactoe.util.VerticalSpacing;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
     static  String name1,name2;
     RecyclerAdapter mRecyclerAdapter;
     RecyclerView mRecyclerView;
-    ArrayList<item> mItems=new ArrayList<>();
+    static int interruptedLeader=1;
+    static String orgName;
+    static ArrayList<item> mItems=new ArrayList<>();
 
     private static final String TAG = "MainActivity";
     public void homeClick(View view){
@@ -37,10 +41,11 @@ public class MainActivity extends AppCompatActivity {
         MyCanvas.mTurn=1;
     }
     public void leaderClick(View view){
-        setContentView(R.layout.recycler_view);
-        mRecyclerView=findViewById(R.id.recyclerView);
-        initRecyclerView();
-        insertNotes();
+        if(interruptedLeader==1) {
+            setContentView(R.layout.recycler_view);
+            mRecyclerView = findViewById(R.id.recyclerView);
+            initRecyclerView();
+        }
     }
     public void gameClicked(View view){
         setContentView(R.layout.activity_main);
@@ -52,8 +57,10 @@ public class MainActivity extends AppCompatActivity {
         mMyCanvas.setMyListener(new MyListener() {
             @Override
             public void updateMyText() {
+                mRecyclerAdapter.notifyDataSetChanged();
                 NameHolder1.setText(name1);
                 NameHolder2.setText(name2);
+
             }
         });
 
@@ -63,15 +70,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ljkl");
         setContentView(R.layout.activity_main);
         mMyCanvas=findViewById(R.id.myCanvas);
-
+        retrieveData();
         NameHolder1=findViewById(R.id.Name1);
         NameHolder2=findViewById(R.id.Name2);
         Intent intent=getIntent();
         name1= intent.getStringExtra("name1");
         name2=intent.getStringExtra("name2");
+        orgName=name1;
         NameHolder1.setText(name1);
         NameHolder2.setText(name2);
         mMyCanvas.setMyListener(new MyListener() {
@@ -93,17 +100,14 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setAdapter(mRecyclerAdapter);
 
     }
-    void insertNotes(){
-        for(int k=1;k<200;k++){
-            item item=new item();
-            item.setName("Title"+k);
-            item.setWin(3);
-            item.setDraw(4);
-            item.setLoss(3);
-            mItems.add(item);
-        }
-        mRecyclerAdapter.notifyDataSetChanged();
+    public void retrieveData(){
+        SharedPreferences sharedPreferences=getSharedPreferences( "com.example.tictactoe",MODE_PRIVATE);
+        Gson gson=new Gson();
+        String json=sharedPreferences.getString("items",null);
+        Type type=new TypeToken<ArrayList<item>>(){}.getType();
+        mItems=gson.fromJson(json,type);
     }
+
 
 
 
