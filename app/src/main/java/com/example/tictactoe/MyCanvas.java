@@ -186,7 +186,6 @@ public class MyCanvas extends View {
             if (mSelectedBoxes[winningPosition[0][0]-1][winningPosition[0][1]-1]== mSelectedBoxes[winningPosition[1][0]-1][winningPosition[1][1]-1] && mSelectedBoxes[winningPosition[2][0]-1][winningPosition[2][1]-1] == mSelectedBoxes[winningPosition[0][0]-1][winningPosition[0][1]-1] && mSelectedBoxes[winningPosition[0][0]-1][winningPosition[0][1]-1] != 0) {
                 MediaPlayer mediaPlayer;
                 stop=1;
-                MainActivity.interruptedLeader=0;
                 if(mTurn==2) {
                     mediaPlayer=MediaPlayer.create(getContext(),R.raw.win1);
                     mediaPlayer.start();
@@ -304,7 +303,6 @@ public class MyCanvas extends View {
                 }
                 Log.d(TAG, "run: "+computerFirst);
 
-                MainActivity.interruptedLeader=1;
             }
         }, 1500);
     }

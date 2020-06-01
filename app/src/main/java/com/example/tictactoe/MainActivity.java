@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.tictactoe.MyCanvas.MyListener;
 
 import java.lang.reflect.Type;
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     static  String name1,name2;
     RecyclerAdapter mRecyclerAdapter;
     RecyclerView mRecyclerView;
-    static int interruptedLeader=1;
+    //static int interruptedLeader=1;
     static String orgName;
     static ArrayList<item> mItems=new ArrayList<>();
 
@@ -41,10 +43,12 @@ public class MainActivity extends AppCompatActivity {
         MyCanvas.mTurn=1;
     }
     public void leaderClick(View view){
-        if(interruptedLeader==1) {
+        if(StartActivity.selected2==2) {
             setContentView(R.layout.recycler_view);
             mRecyclerView = findViewById(R.id.recyclerView);
             initRecyclerView();
+        }else{
+            Toast.makeText(this,"only for single player mode",Toast.LENGTH_SHORT).show();
         }
     }
     public void gameClicked(View view){
@@ -106,6 +110,10 @@ public class MainActivity extends AppCompatActivity {
         String json=sharedPreferences.getString("items",null);
         Type type=new TypeToken<ArrayList<item>>(){}.getType();
         mItems=gson.fromJson(json,type);
+
+        if(mItems==null){
+            mItems=new ArrayList<>();
+        }
     }
 
 
